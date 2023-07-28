@@ -10,7 +10,7 @@ part 'posts_state.dart';
 class PostsBloc extends Bloc<PostsEvent, PostsState> {
   PostsBloc() : super(PostsInitialState()) {
     on<PostsInitialFetchEvent>(postsInitialFetchEvent);
-    on<PostAddEvent>(postAddEvent);
+    on<PostAddEvent>(postAddEvent); 
   }
 
   FutureOr<void> postsInitialFetchEvent(
