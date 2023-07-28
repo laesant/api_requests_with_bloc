@@ -16,12 +16,17 @@ class _PostsPageState extends State<PostsPage> {
       appBar: AppBar(
         title: const Text("Página de Postagens"),
       ),
+      floatingActionButton: FloatingActionButton.large(
+          onPressed: () => context.read<PostsBloc>().add(PostAddEvent()),
+          child: const Icon(Icons.add)),
       body: BlocConsumer<PostsBloc, PostsState>(
         listenWhen: (previous, current) => current is PostsActionState,
         buildWhen: (previous, current) => current is! PostsActionState,
         listener: (context, state) {},
         builder: (context, state) {
           switch (state.runtimeType) {
+            case PostsFetchingLoadingState:
+              return const Center(child: CircularProgressIndicator());
             case PostFetchingSuccessfulState:
               final successState = state as PostFetchingSuccessfulState;
 
@@ -29,9 +34,16 @@ class _PostsPageState extends State<PostsPage> {
                   itemCount: successState.posts.length,
                   itemBuilder: (context, index) {
                     final post = successState.posts[index];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text(post.title)],
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.grey.shade200),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [Text(post.title), Text(post.body)],
+                      ),
                     );
                   });
             default:
